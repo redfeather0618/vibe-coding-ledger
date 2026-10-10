@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SmartLedger 智慧多帳戶記帳與收支統計 App</title>
+    <title>SmartLedger 智慧記帳與資產總覽 App</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Chart.js CDN -->
@@ -11,72 +11,29 @@
     <!-- FontAwesome 圖標 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body class="bg-slate-50 text-slate-800 font-sans min-h-screen pb-12">
+<body class="bg-slate-100 text-slate-800 font-sans min-h-screen pb-12">
 
     <!-- 頂部導覽列 -->
-    <header class="bg-indigo-600 text-white shadow-lg sticky top-0 z-50">
-        <div class="max-w-6xl mx-auto px-4 py-4 flex justify-between items-center">
-            <h1 class="text-xl md:text-2xl font-bold flex items-center gap-2">
-                <i class="fa-solid fa-wallet text-yellow-300"></i> SmartLedger 記帳管家
+    <header class="bg-slate-900 text-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3.5 flex justify-between items-center">
+            <h1 class="text-xl font-bold flex items-center gap-2">
+                <i class="fa-solid fa-wallet text-indigo-400"></i> SmartLedger 財務管理系統
             </h1>
-            <button onclick="resetData()" class="text-xs bg-indigo-700 hover:bg-indigo-800 text-indigo-100 px-3 py-1.5 rounded-lg transition">
-                <i class="fa-solid fa-rotate-right mr-1"></i> 重置範例資料
+            <button onclick="resetData()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg transition border border-slate-700">
+                <i class="fa-solid fa-rotate-right mr-1"></i> 載入 Excel 預設資料
             </button>
         </div>
     </header>
 
-    <main class="max-w-6xl mx-auto px-4 mt-6 grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- 主體內容：左右雙欄左右並排 (左側：記帳與明細 | 右側：資產總覽與圖表) -->
+    <main class="max-w-7xl mx-auto px-4 mt-6 grid grid-cols-1 lg:grid-cols-12 gap-6">
 
-        <!-- 左側：資產總覽與帳戶管理 -->
-        <section class="lg:col-span-1 space-y-6">
-            <!-- 總資產卡片 -->
-            <div class="bg-gradient-to-r from-indigo-500 to-purple-600 rounded-2xl p-6 text-white shadow-md">
-                <p class="text-xs font-medium text-indigo-100 uppercase tracking-wider">總資產 (Total Balance)</p>
-                <h2 id="totalBalance" class="text-3xl font-extrabold mt-1">NT$ 0</h2>
-                <div class="mt-4 pt-4 border-t border-indigo-400/40 flex justify-between text-sm">
-                    <div>
-                        <span class="block text-indigo-200 text-xs">總收入</span>
-                        <span id="totalIncome" class="font-bold text-green-300">+NT$ 0</span>
-                    </div>
-                    <div class="text-right">
-                        <span class="block text-indigo-200 text-xs">總支出</span>
-                        <span id="totalExpense" class="font-bold text-red-300">-NT$ 0</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 帳戶列表區塊 -->
-            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-slate-700 flex items-center gap-2">
-                        <i class="fa-solid fa-building-columns text-indigo-500"></i> 銀行帳戶 / 錢包
-                    </h3>
-                    <button onclick="toggleAddAccountModal()" class="text-xs bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-semibold px-2.5 py-1 rounded-md transition">
-                        + 新增帳戶
-                    </button>
-                </div>
-                <div id="accountList" class="space-y-3">
-                    <!-- 帳戶項目會動態渲染於此 -->
-                </div>
-            </div>
-
-            <!-- 支出分類統計圖表 -->
-            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-100">
-                <h3 class="font-bold text-slate-700 mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-chart-pie text-indigo-500"></i> 支出分類統計
-                </h3>
-                <div class="relative h-48">
-                    <canvas id="expenseChart"></canvas>
-                </div>
-            </div>
-        </section>
-
-        <!-- 右側：記帳輸入與交易明細 -->
-        <section class="lg:col-span-2 space-y-6">
+        <!-- 左半邊：記帳紀錄與明細管理 (佔 7 欄) -->
+        <section class="lg:col-span-7 space-y-6">
             <!-- 新增記帳表單 -->
-            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
-                <h3 class="font-bold text-slate-700 text-lg mb-4 flex items-center gap-2">
-                    <i class="fa-solid fa-pen-to-square text-indigo-500"></i> 新增收支記錄
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200/80">
+                <h3 class="font-bold text-slate-800 text-lg mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-pen-to-square text-indigo-600"></i> 新增收支記錄
                 </h3>
 
                 <form id="transactionForm" onsubmit="addTransaction(event)" class="space-y-4">
@@ -86,7 +43,7 @@
                             <i class="fa-solid fa-circle-minus mr-1"></i> 支出
                         </button>
                         <button type="button" id="typeIncomeBtn" onclick="setType('income')" class="py-2 rounded-lg font-bold text-sm transition text-slate-500">
-                            <i class="fa-solid fa-circle-plus mr-1"></i> 收入 (工作/副業)
+                            <i class="fa-solid fa-circle-plus mr-1"></i> 收入 (工作/打工)
                         </button>
                     </div>
 
@@ -94,27 +51,27 @@
                         <!-- 金額 -->
                         <div>
                             <label class="block text-xs font-semibold text-slate-500 mb-1">金額 (NT$)</label>
-                            <input type="number" id="amount" required min="1" placeholder="例如：120" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            <input type="number" id="amount" required min="1" placeholder="例如：120" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-slate-50/50">
                         </div>
 
                         <!-- 交易日期 -->
                         <div>
                             <label class="block text-xs font-semibold text-slate-500 mb-1">日期</label>
-                            <input type="date" id="date" required class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            <input type="date" id="date" required class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-slate-50/50">
                         </div>
 
                         <!-- 分類 -->
                         <div>
                             <label class="block text-xs font-semibold text-slate-500 mb-1">項目分類</label>
-                            <select id="category" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            <select id="category" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-slate-50/50">
                                 <!-- 動態渲染 -->
                             </select>
                         </div>
 
                         <!-- 選擇帳戶 -->
                         <div>
-                            <label class="block text-xs font-semibold text-slate-500 mb-1">收付款帳戶</label>
-                            <select id="accountSelect" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            <label class="block text-xs font-semibold text-slate-500 mb-1">扣款 / 入帳帳戶</label>
+                            <select id="accountSelect" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-slate-50/50">
                                 <!-- 動態渲染 -->
                             </select>
                         </div>
@@ -123,27 +80,27 @@
                     <!-- 備註 -->
                     <div>
                         <label class="block text-xs font-semibold text-slate-500 mb-1">備註 / 說明</label>
-                        <input type="text" id="note" placeholder="例如：午餐便當、10月工作薪資" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        <input type="text" id="note" placeholder="例如：午餐便當、10月工作薪資" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:outline-none bg-slate-50/50">
                     </div>
 
-                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl transition shadow-md">
-                        確認儲存
+                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2.5 rounded-xl transition shadow-md shadow-indigo-100">
+                        確認儲存記帳
                     </button>
                 </form>
             </div>
 
             <!-- 歷史交易明細 -->
-            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+            <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200/80">
                 <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-slate-700 text-lg flex items-center gap-2">
-                        <i class="fa-solid fa-list-check text-indigo-500"></i> 歷史交易明細
+                    <h3 class="font-bold text-slate-800 text-lg flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-indigo-600"></i> 歷史交易明細
                     </h3>
                     <span id="recordCount" class="text-xs text-slate-400">共 0 筆記錄</span>
                 </div>
 
-                <div class="overflow-x-auto">
+                <div class="overflow-x-auto max-h-96 overflow-y-auto">
                     <table class="w-full text-left text-sm">
-                        <thead class="bg-slate-50 text-slate-500 text-xs uppercase border-b border-slate-100">
+                        <thead class="bg-slate-50 text-slate-500 text-xs uppercase border-b border-slate-100 sticky top-0">
                             <tr>
                                 <th class="p-3">日期</th>
                                 <th class="p-3">分類</th>
@@ -160,6 +117,51 @@
                 </div>
             </div>
         </section>
+
+        <!-- 右半邊：資產總覽與圖表分析 (佔 5 欄) -->
+        <section class="lg:col-span-5 space-y-6">
+            <!-- 總資產摘要卡片 -->
+            <div class="bg-gradient-to-br from-indigo-600 to-slate-900 rounded-2xl p-6 text-white shadow-lg">
+                <p class="text-xs font-medium text-indigo-200 uppercase tracking-wider">總資產 (Total Net Worth)</p>
+                <h2 id="totalBalance" class="text-3xl font-extrabold mt-1">NT$ 0</h2>
+                <div class="mt-4 pt-4 border-t border-indigo-500/30 grid grid-cols-2 text-sm">
+                    <div>
+                        <span class="block text-indigo-200 text-xs">總收入統計</span>
+                        <span id="totalIncome" class="font-bold text-green-300">+NT$ 0</span>
+                    </div>
+                    <div class="text-right">
+                        <span class="block text-indigo-200 text-xs">總支出統計</span>
+                        <span id="totalExpense" class="font-bold text-red-300">-NT$ 0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 各銀行帳戶金額總覽 (對應 Excel 紀錄) -->
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-building-columns text-indigo-600"></i> 各銀行戶頭與錢包餘額 (Excel同步)
+                    </h3>
+                    <button onclick="toggleAddAccountModal()" class="text-xs bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-semibold px-2.5 py-1 rounded-md transition">
+                        + 新增帳戶
+                    </button>
+                </div>
+                <div id="accountList" class="space-y-2.5 max-h-64 overflow-y-auto pr-1">
+                    <!-- 帳戶項目會動態渲染於此 -->
+                </div>
+            </div>
+
+            <!-- 支出分類統計圖表 -->
+            <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80">
+                <h3 class="font-bold text-slate-800 text-sm mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-chart-pie text-indigo-600"></i> 支出項目分類佔比
+                </h3>
+                <div class="relative h-48">
+                    <canvas id="expenseChart"></canvas>
+                </div>
+            </div>
+        </section>
+
     </main>
 
     <!-- 新增帳戶 Modal 快顯視窗 -->
@@ -168,7 +170,7 @@
             <h3 class="font-bold text-slate-800 text-lg">新增銀行 / 錢包帳戶</h3>
             <div>
                 <label class="block text-xs font-semibold text-slate-500 mb-1">帳戶名稱</label>
-                <input type="text" id="newAccName" placeholder="例如：國泰世華、Richart" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                <input type="text" id="newAccName" placeholder="例如：富邦銀行、Line Pay" class="w-full px-3 py-2 border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500">
             </div>
             <div>
                 <label class="block text-xs font-semibold text-slate-500 mb-1">初始金額 (NT$)</label>
@@ -176,7 +178,7 @@
             </div>
             <div class="flex gap-2 pt-2">
                 <button onclick="toggleAddAccountModal()" class="w-1/2 py-2 bg-slate-100 text-slate-600 rounded-lg font-semibold hover:bg-slate-200 transition">取消</button>
-                <button onclick="addAccount()" class="w-1/2 py-2 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition">新增</button>
+                <button onclick="addAccount()" class="w-1/2 py-2 bg-indigo-600 text-white rounded-lg font-semibold hover:bg-indigo-700 transition">確認新增</button>
             </div>
         </div>
     </div>
@@ -185,26 +187,31 @@
     <script>
         // 分類選項定義
         const categories = {
-            expense: ['餐飲美食', '交通出行', '休閒娛樂', '日常購物', '居住繳費', '其他支出'],
-            income: ['正職薪資', '兼職/副業', '投資收益', '獎金回饋', '其他收入']
+            expense: ['伙食費', '交通費', '書&學校雜費', '休閒娛樂', '其他'],
+            income: ['工作薪資', '打工薪資', '實習津貼', '其他收入']
         };
 
-        // 預設示範資料
-        const defaultAccounts = [
-            { id: 'acc_1', name: '現金錢包', balance: 3500 },
-            { id: 'acc_2', name: '中國信託', balance: 45000 },
-            { id: 'acc_3', name: '台新 Richart', balance: 28000 }
+        // 從你上傳的 Excel 總攬表讀取出的各帳戶真實餘額資料
+        const excelAccounts = [
+            { id: 'acc_post', name: '郵局', balance: 168534 },
+            { id: 'acc_bot', name: '土銀', balance: 14383 },
+            { id: 'acc_ctbc', name: '中信帳戶', balance: 6368 },
+            { id: 'acc_fubon', name: '富邦', balance: -3600 },
+            { id: 'acc_esun', name: '玉山', balance: 1000 },
+            { id: 'acc_cash', name: '現 金', balance: 1500 },
+            { id: 'acc_悠遊卡', name: '悠遊卡', balance: 152 },
+            { id: 'acc_card2', name: '卡二', balance: -9 }
         ];
 
         const defaultTransactions = [
-            { id: 't_1', type: 'income', amount: 42000, category: '正職薪資', accountId: 'acc_2', date: '2025-10-05', note: '10月工作月薪' },
-            { id: 't_2', type: 'expense', amount: 150, category: '餐飲美食', accountId: 'acc_1', date: '2025-10-10', note: '拉麵午餐' },
-            { id: 't_3', type: 'expense', amount: 1200, category: '日常購物', accountId: 'acc_3', date: '2025-10-12', note: '買生活用品' }
+            { id: 't_1', type: 'income', amount: 42000, category: '工作薪資', accountId: 'acc_ctbc', date: '2026-10-01', note: '10月工作月薪' },
+            { id: 't_2', type: 'expense', amount: 150, category: '伙食費', accountId: 'acc_cash', date: '2026-10-05', note: '午餐便當' },
+            { id: 't_3', type: 'expense', amount: 1200, category: '交通費', accountId: 'acc_post', date: '2026-10-08', note: 'TPASS月票' }
         ];
 
         // 狀態變數
-        let accounts = JSON.parse(localStorage.getItem('sl_accounts')) || defaultAccounts;
-        let transactions = JSON.parse(localStorage.getItem('sl_transactions')) || defaultTransactions;
+        let accounts = JSON.parse(localStorage.getItem('sl_accounts_v2')) || excelAccounts;
+        let transactions = JSON.parse(localStorage.getItem('sl_transactions_v2')) || defaultTransactions;
         let currentType = 'expense';
         let chartInstance = null;
 
@@ -252,13 +259,6 @@
             const note = document.getElementById('note').value;
 
             const account = accounts.find(a => a.id === accountId);
-
-            // 扣款餘額檢核
-            if (currentType === 'expense' && account.balance < amount) {
-                if (!confirm(`警告：[${account.name}] 的金額不足（目前餘額: NT$${account.balance}），確定要繼續扣款嗎？`)) {
-                    return;
-                }
-            }
 
             // 更新帳戶餘額
             if (currentType === 'expense') {
@@ -332,9 +332,11 @@
         function renderAccounts() {
             const container = document.getElementById('accountList');
             container.innerHTML = accounts.map(a => `
-                <div class="flex justify-between items-center p-3 rounded-xl bg-slate-50 border border-slate-100">
-                    <span class="font-medium text-slate-700 text-sm"><i class="fa-regular fa-credit-card mr-2 text-indigo-400"></i>${a.name}</span>
-                    <span class="font-bold text-slate-800">NT$ ${a.balance.toLocaleString()}</span>
+                <div class="flex justify-between items-center p-2.5 rounded-xl bg-slate-50 border border-slate-100">
+                    <span class="font-medium text-slate-700 text-xs flex items-center gap-2">
+                        <i class="fa-regular fa-credit-card text-indigo-400"></i>${a.name}
+                    </span>
+                    <span class="font-bold text-xs ${a.balance < 0 ? 'text-red-500' : 'text-slate-800'}">NT$ ${a.balance.toLocaleString()}</span>
                 </div>
             `).join('');
         }
@@ -396,7 +398,7 @@
             chartInstance = new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: labels.length > 0 ? labels : ['無資料'],
+                    labels: labels.length > 0 ? labels : ['尚無支出'],
                     datasets: [{
                         data: data.length > 0 ? data : [1],
                         backgroundColor: ['#6366f1', '#ec4899', '#f59e0b', '#10b981', '#3b82f6', '#8b5cf6', '#cbd5e1']
@@ -414,18 +416,18 @@
 
         // 儲存至 LocalStorage 並刷新畫面
         function saveAndRefresh() {
-            localStorage.setItem('sl_accounts', JSON.stringify(accounts));
-            localStorage.setItem('sl_transactions', JSON.stringify(transactions));
+            localStorage.setItem('sl_accounts_v2', JSON.stringify(accounts));
+            localStorage.setItem('sl_transactions_v2', JSON.stringify(transactions));
             renderAccounts();
             renderTransactions();
             updateSummaryAndChart();
             updateCategoryOptions();
         }
 
-        // 重置為預設資料
+        // 重置為 Excel 預設資料
         function resetData() {
-            if (confirm('確定要清除所有紀錄並重置為範例資料嗎？')) {
-                accounts = [...defaultAccounts];
+            if (confirm('確定要重新載入 Excel 原始帳戶與預設紀錄嗎？')) {
+                accounts = JSON.parse(JSON.stringify(excelAccounts));
                 transactions = [...defaultTransactions];
                 saveAndRefresh();
             }
