@@ -20,7 +20,7 @@
                 <i class="fa-solid fa-wallet text-indigo-400"></i> SmartLedger 財務管家
             </h1>
             <button onclick="resetData()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1.5 rounded-lg transition border border-slate-700">
-                <i class="fa-solid fa-rotate-right mr-1"></i> 重置預設資料
+                <i class="fa-solid fa-rotate-right mr-1"></i> 重設系統資料
             </button>
         </div>
     </header>
@@ -48,11 +48,11 @@
 
             <!-- 兩欄佈局：銀行戶頭與圖表 -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- 各銀行帳戶金額總覽 (對應 Excel 紀錄) -->
+                <!-- 各銀行帳戶金額總覽 -->
                 <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200/80">
                     <div class="flex justify-between items-center mb-4">
                         <h3 class="font-bold text-slate-800 text-sm flex items-center gap-2">
-                            <i class="fa-solid fa-building-columns text-indigo-600"></i> 各銀行戶頭與錢包餘額 (Excel同步)
+                            <i class="fa-solid fa-building-columns text-indigo-600"></i> 各銀行戶頭與錢包餘額
                         </h3>
                         <button onclick="toggleAddAccountModal()" class="text-xs bg-indigo-50 hover:bg-indigo-100 text-indigo-600 font-semibold px-2.5 py-1 rounded-md transition">
                             + 新增帳戶
@@ -159,9 +159,9 @@
                 <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                     <div>
                         <h3 class="font-bold text-slate-800 text-lg flex items-center gap-2">
-                            <i class="fa-solid fa-calendar-days text-indigo-600"></i> Excel 各月份支出明細查詢
+                            <i class="fa-solid fa-calendar-days text-indigo-600"></i> 各月份歷史支出明細查詢
                         </h3>
-                        <p class="text-xs text-slate-400 mt-0.5">檢視財務管理 Excel 檔案中各月份的詳細消費事項與分類統計</p>
+                        <p class="text-xs text-slate-400 mt-0.5">檢視財務管理系統中各月份的詳細消費事項與分類統計</p>
                     </div>
                     <!-- 月份選擇下拉選單 -->
                     <div class="flex items-center gap-2">
@@ -265,76 +265,24 @@
 
     <!-- JavaScript 邏輯控制 -->
     <script>
-        // Excel 各月份真實支出紀錄數據
+        // 各月份歷史支出明細資料範本
         const excelMonthlyData = {
             "1月": [
-                {date: "2023-01-01", item: "午餐78+晚餐120", food: 198, transport: 0, edu: 0, other: 0, amount: 198},
-                {date: "2023-01-02", item: "午餐71+晚餐120", food: 191, transport: 0, edu: 0, other: 0, amount: 191},
-                {date: "2023-01-03", item: "午餐78+榮次家1200+洗衣20+飲料30", food: 108, transport: 0, edu: 20, other: 1200, amount: 1328},
-                {date: "2023-01-04", item: "午餐109-禮品卡150+晚餐120", food: 229, transport: 0, edu: 0, other: 0, amount: 229},
-                {date: "2023-01-05", item: "晚餐20+103", food: 123, transport: 0, edu: 0, other: 0, amount: 123},
-                {date: "2023-01-06", item: "午餐78+晚餐120", food: 198, transport: 0, edu: 0, other: 0, amount: 198},
-                {date: "2023-01-07", item: "午餐71+晚餐60+洗衣20", food: 131, transport: 0, edu: 20, other: 0, amount: 151},
-                {date: "2023-01-08", item: "午餐150+點心29+100", food: 279, transport: 0, edu: 0, other: 0, amount: 279},
-                {date: "2023-01-09", item: "午餐135+晚餐63+月老350", food: 198, transport: 0, edu: 0, other: 350, amount: 548},
-                {date: "2023-01-10", item: "午餐250+火車22+手錶289", food: 250, transport: 22, edu: 0, other: 289, amount: 561}
+                {date: "2026-01-01", item: "午餐便當+飲料", food: 180, transport: 0, edu: 0, other: 0, amount: 180},
+                {date: "2026-01-05", item: "悠遊卡加值", food: 0, transport: 500, edu: 0, other: 0, amount: 500}
             ],
             "2月": [
-                {date: "2023-02-01", item: "早餐18+午餐100", food: 118, transport: 0, edu: 0, other: 0, amount: 118},
-                {date: "2023-02-02", item: "早餐45+午餐100+晚餐102", food: 247, transport: 0, edu: 0, other: 0, amount: 247},
-                {date: "2023-02-03", item: "晚餐220+剪髮100", food: 220, transport: 0, edu: 0, other: 100, amount: 320},
-                {date: "2023-02-08", item: "午餐1205", food: 1205, transport: 0, edu: 0, other: 0, amount: 1205},
-                {date: "2023-02-10", item: "午餐100+晚餐84+櫃子2660", food: 194, transport: 0, edu: 0, other: 2660, amount: 2854}
+                {date: "2026-02-02", item: "早餐與咖啡", food: 120, transport: 0, edu: 0, other: 0, amount: 120}
             ],
             "3月": [
-                {date: "2023-03-01", item: "火車117+捷運20-捷運回饋18", food: 0, transport: 119, edu: 0, other: 0, amount: 119},
-                {date: "2023-03-02", item: "TPASS1200+儲值1500+午餐165+晚餐150", food: 315, transport: 1200, edu: 0, other: 0, amount: 1515},
-                {date: "2023-03-03", item: "午餐110+晚餐78", food: 110, transport: 78, edu: 0, other: 0, amount: 188},
-                {date: "2023-03-05", item: "午餐110+晚餐60+洗衣20+消夜102", food: 272, transport: 0, edu: 20, other: 0, amount: 292},
-                {date: "2023-03-06", item: "午餐150+晚餐90+霜淇淋28+消災300", food: 268, transport: 0, edu: 0, other: 300, amount: 568}
+                {date: "2026-03-01", item: "月票交通費", food: 0, transport: 1200, edu: 0, other: 0, amount: 1200}
             ],
-            "4月": [
-                {date: "2023-04-01", item: "午餐60+晚餐50+60+洗衣20+儲值66+捷運70", food: 170, transport: 70, edu: 20, other: 0, amount: 260},
-                {date: "2023-04-02", item: "午餐150+晚餐120+捷運55+火車131+儲值170", food: 270, transport: 186, edu: 0, other: 0, amount: 456},
-                {date: "2023-04-04", item: "購物400", food: 0, transport: 0, edu: 0, other: 400, amount: 400},
-                {date: "2023-04-07", item: "TPASS1200+午餐150+晚餐71+儲值1200", food: 221, transport: 1200, edu: 0, other: 0, amount: 1421}
-            ],
-            "5月": [
-                {date: "2023-05-03", item: "火車139", food: 0, transport: 139, edu: 0, other: 0, amount: 139},
-                {date: "2023-05-04", item: "午餐165", food: 165, transport: 0, edu: 0, other: 0, amount: 165},
-                {date: "2023-05-06", item: "午餐119+晚餐70", food: 189, transport: 0, edu: 0, other: 0, amount: 189},
-                {date: "2023-05-07", item: "捷運35+TPASS1200+火車27+儲值1237", food: 0, transport: 1262, edu: 0, other: 0, amount: 1262}
-            ],
-            "6月": [
-                {date: "2023-06-01", item: "午餐165+晚餐63+63+27+洗衣20", food: 318, transport: 0, edu: 20, other: 0, amount: 338},
-                {date: "2023-06-02", item: "午餐102+晚餐150+霜淇淋35", food: 287, transport: 0, edu: 0, other: 0, amount: 287},
-                {date: "2023-06-03", item: "午餐109+晚餐100+其他95", food: 209, transport: 0, edu: 0, other: 95, amount: 304}
-            ],
-            "7月": [
-                {date: "2023-07-01", item: "火車27+27+三玖GK12490", food: 0, transport: 54, edu: 0, other: 12490, amount: 12544},
-                {date: "2023-07-03", item: "午餐200+架子1300+汽油100+災險97+火車54", food: 200, transport: 54, edu: 0, other: 1497, amount: 1751},
-                {date: "2023-07-06", item: "機油200+晚餐78+TPASS288+儲值300+其他40", food: 78, transport: 288, edu: 0, other: 240, amount: 606}
-            ],
-            "8月": [
-                {date: "2023-08-01", item: "其他213", food: 0, transport: 0, edu: 0, other: 213, amount: 213}
-            ],
-            "9月": [
-                {date: "2023-09-07", item: "存款6000+包裹郵費70+其他223", food: 0, transport: 0, edu: 0, other: 293, amount: 293},
-                {date: "2023-09-08", item: "火車131+捷運20+70+晚餐110+霜淇淋28+儲值220", food: 138, transport: 221, edu: 0, other: 0, amount: 359},
-                {date: "2023-09-10", item: "早餐36+午餐165+扭蛋200+三玖450+晚餐60+儲值+559捷運70", food: 261, transport: 70, edu: 0, other: 650, amount: 981}
-            ],
+            "4月": [], "5月": [], "6月": [], "7月": [], "8月": [], "9月": [],
             "10月": [
-                {date: "2023-10-01", item: "午餐120+晚餐165+TPASS1200+儲值1200", food: 285, transport: 1200, edu: 0, other: 0, amount: 1485},
-                {date: "2023-10-02", item: "早餐30+午餐80+晚餐64+洗衣20", food: 174, transport: 0, edu: 20, other: 0, amount: 194},
-                {date: "2023-10-03", item: "午餐晚餐199+電費100", food: 199, transport: 0, edu: 100, other: 0, amount: 299},
-                {date: "2023-10-04", item: "午餐51+下午茶600+晚餐64+玩具77", food: 715, transport: 0, edu: 0, other: 77, amount: 792},
-                {date: "2023-10-05", item: "午餐130+晚餐51", food: 181, transport: 0, edu: 0, other: 0, amount: 181},
-                {date: "2023-10-07", item: "午餐116+晚餐110+洗衣20", food: 226, transport: 0, edu: 20, other: 0, amount: 246},
-                {date: "2023-10-08", item: "午餐120+27+晚餐165+其他8", food: 312, transport: 0, edu: 0, other: 8, amount: 320},
-                {date: "2023-10-09", item: "午餐240+190+晚餐70+火車117+儲值83", food: 500, transport: 117, edu: 0, other: 0, amount: 617}
+                {date: "2026-10-01", item: "午餐便當", food: 120, transport: 0, edu: 0, other: 0, amount: 120},
+                {date: "2026-10-02", item: "公車捷運交通", food: 0, transport: 60, edu: 0, other: 0, amount: 60}
             ],
-            "11月": [],
-            "12月": []
+            "11月": [], "12月": []
         };
 
         // 分類選項定義
@@ -343,27 +291,24 @@
             income: ['工作薪資', '打工薪資', '實習津貼', '其他收入']
         };
 
-        // 從 Excel 讀取出的各帳戶真實餘額
-        const excelAccounts = [
-            { id: 'acc_post', name: '郵局', balance: 168534 },
-            { id: 'acc_bot', name: '土銀', balance: 14383 },
-            { id: 'acc_ctbc', name: '中信帳戶', balance: 6368 },
-            { id: 'acc_fubon', name: '富邦', balance: -3600 },
-            { id: 'acc_esun', name: '玉山', balance: 1000 },
-            { id: 'acc_cash', name: '現 金', balance: 1500 },
-            { id: 'acc_悠遊卡', name: '悠遊卡', balance: 152 },
-            { id: 'acc_card2', name: '卡二', balance: -9 }
+        // 乾淨的預設示範帳戶（金額歸零或提供乾淨初始範例）
+        const defaultAccounts = [
+            { id: 'acc_post', name: '郵局', balance: 0 },
+            { id: 'acc_bot', name: '土銀', balance: 0 },
+            { id: 'acc_ctbc', name: '中信帳戶', balance: 0 },
+            { id: 'acc_cash', name: '現金錢包', balance: 1000 },
+            { id: 'acc_悠遊卡', name: '悠遊卡', balance: 100 }
         ];
 
+        // 乾淨的預設示範交易紀錄
         const defaultTransactions = [
-            { id: 't_1', type: 'income', amount: 42000, category: '工作薪資', accountId: 'acc_ctbc', date: '2026-10-01', note: '10月工作月薪' },
-            { id: 't_2', type: 'expense', amount: 150, category: '伙食費', accountId: 'acc_cash', date: '2026-10-05', note: '午餐便當' },
-            { id: 't_3', type: 'expense', amount: 1200, category: '交通費', accountId: 'acc_post', date: '2026-10-08', note: 'TPASS月票' }
+            { id: 't_1', type: 'income', amount: 5000, category: '打工薪資', accountId: 'acc_cash', date: '2026-10-01', note: '示範打工收入' },
+            { id: 't_2', type: 'expense', amount: 120, category: '伙食費', accountId: 'acc_cash', date: '2026-10-05', note: '示範午餐支出' }
         ];
 
         // 狀態變數
-        let accounts = JSON.parse(localStorage.getItem('sl_accounts_v3')) || excelAccounts;
-        let transactions = JSON.parse(localStorage.getItem('sl_transactions_v3')) || defaultTransactions;
+        let accounts = JSON.parse(localStorage.getItem('sl_accounts_v4')) || defaultAccounts;
+        let transactions = JSON.parse(localStorage.getItem('sl_transactions_v4')) || defaultTransactions;
         let currentType = 'expense';
         let chartInstance = null;
 
@@ -418,7 +363,7 @@
             accSelect.innerHTML = accounts.map(a => `<option value="${a.id}">${a.name} (餘額: $${a.balance.toLocaleString()})</option>`).join('');
         }
 
-        // 新增收支記錄
+        // 新蒸收支記錄
         function addTransaction(e) {
             e.preventDefault();
             const amount = parseFloat(document.getElementById('amount').value);
@@ -536,7 +481,7 @@
             }).join('');
         }
 
-        // 渲染 Excel 各月份支出紀錄頁面
+        // 渲染各月份支出紀錄頁面
         function renderMonthlyExpense() {
             const selectedMonth = document.getElementById('monthSelect').value;
             const items = excelMonthlyData[selectedMonth] || [];
@@ -616,18 +561,18 @@
 
         // 儲存至 LocalStorage 並刷新畫面
         function saveAndRefresh() {
-            localStorage.setItem('sl_accounts_v3', JSON.stringify(accounts));
-            localStorage.setItem('sl_transactions_v3', JSON.stringify(transactions));
+            localStorage.setItem('sl_accounts_v4', JSON.stringify(accounts));
+            localStorage.setItem('sl_transactions_v4', JSON.stringify(transactions));
             renderAccounts();
             renderTransactions();
             updateSummaryAndChart();
             updateCategoryOptions();
         }
 
-        // 重置資料
+        // 重設資料
         function resetData() {
-            if (confirm('確定要重置為預設與 Excel 同步資料嗎？')) {
-                accounts = JSON.parse(JSON.stringify(excelAccounts));
+            if (confirm('確定要將系統資料重設為乾淨的預設示範狀態嗎？')) {
+                accounts = JSON.parse(JSON.stringify(defaultAccounts));
                 transactions = [...defaultTransactions];
                 saveAndRefresh();
                 renderMonthlyExpense();
